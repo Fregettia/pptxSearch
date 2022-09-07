@@ -24,6 +24,7 @@ def process(folderPath,searchInput):
                     searchInputFiles.append(os.path.join(root, name))
 
     for eachFile in searchInputFiles:
+        count=1
         templist=[]
         prs = Presentation(eachFile) 
         for i in range(len(prs.slides)):
@@ -36,12 +37,12 @@ def process(folderPath,searchInput):
                         if eachFile not in processFiles:
                             processFiles.append(eachFile)
                         name=str(eachFile).split("\\")[-1]
-                        result.append((i+1,str(shape.text),name))
-
+                        result.append((count,i+1,str(shape.text),name))
+                        count=count+1
                         break
     if result != []:
         df = pd.DataFrame(result)
-        df.columns = ['页数', '内容','源文件']
+        df.columns = ['页码','对应页码', '内容','源文件']
         df.to_excel(folderPath+"/"+str(searchInput)+"result.xlsx", index=False)
     else:
         print("没有查到内容")
